@@ -155,14 +155,14 @@ nav button{display:flex;align-items:center;gap:12px;text-align:left;font-size:16
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style></head><body>
 <div id="app">
-<header><div class="logo">stock<span>gpt</span></div><div class="pills"><div class="pill" id="hh"></div><div class="pill" id="hs"></div><div class="pill" id="hx"></div><button class="pill" id="gear" aria-label="Manage account">⚙️</button></div></header>
+<header><div class="logo">stock<span>wiz</span></div><div class="pills"><div class="pill" id="hh"></div><div class="pill" id="hs"></div><div class="pill" id="hx"></div><button class="pill" id="gear" aria-label="Manage account">⚙️</button></div></header>
 <main>
 <section class="view on" id="learn"></section>
 <section class="view" id="chat">
 <div id="msgs"></div>
 <div id="tools"><button class="chip" id="sm" aria-pressed="false">🧒 Simple words: off</button></div>
 <div id="chips"></div>
-<div id="bar2"><input id="in" placeholder="Ask about stocks…" aria-label="Ask stockgpt" autocomplete="off"><button class="btn" id="go">Send</button></div>
+<div id="bar2"><input id="in" placeholder="Ask about stocks…" aria-label="Ask StockWiz" autocomplete="off"><button class="btn" id="go">Send</button></div>
 <div class="note">Educational only. Not financial advice.</div>
 </section>
 <section class="view" id="news"></section>
@@ -225,9 +225,9 @@ const U=[
 {n:"Behavior",q:[["Loss aversion is…","Feeling losses more strongly than equal gains","Avoiding all stocks","A tax rule"],["Confirmation bias leads investors to…","Favor information that backs their view","Diversify more","Ignore all news"],["Short selling has unlimited risk because…","A price can rise without limit","Fees are fixed","Shares are free"]]}]}];
 const F=U.flatMap(u=>u.L),OFF=[0,54,0,-54],PAL=[["#18965c","#0f7545"],["#2f6fe0","#2255b0"],["#8b45d6","#6a30a8"],["#d9631a","#aa4a10"]];
 let S={xp:0,done:[],streak:0,last:"",days:[],name:"Trader",hd:[],th:"auto",hr:5,hday:""};
-try{Object.assign(S,JSON.parse(localStorage.getItem('stockgpt:v1')||'{}'))}catch(e){}
+try{Object.assign(S,JSON.parse(localStorage.getItem('StockWiz:v1')||'{}'))}catch(e){}
 let ACC=null,cloud=null,syncT=0;
-const save=()=>{if(ACC)return queueSync();try{localStorage.setItem('stockgpt:v1',JSON.stringify(S))}catch(e){}};
+const save=()=>{if(ACC)return queueSync();try{localStorage.setItem('StockWiz:v1',JSON.stringify(S))}catch(e){}};
 const ds=d=>d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
 const ago=n=>{const d=new Date();d.setDate(d.getDate()-n);return d};
 const eff=()=>S.last===ds(new Date())||S.last===ds(ago(1))?S.streak:0;
@@ -354,7 +354,7 @@ function check(){
  if(q.ch)$('#cv').innerHTML=cs(q.ch.h,q.ch.n,q[1]=='Profit');
  const out=!good&&!NOH&&S.hr<=0;
  $('#ft').className='ft '+(good?'ok':'no');
- $('#ft').innerHTML=`<p>${good?'Correct!':'Correct answer: '+q[1]}</p>${q.why?`<p class="xs2">${q.why}</p>`:''}${good?'':'<button class="btn ghost" id="ask">Ask stockgpt why</button><button class="btn ghost" id="asks">Explain it in simple words</button>'}<button class="btn" id="${out?'pr':'nx'}">${out?'Out of hearts: start practice':'Continue'}</button>`;
+ $('#ft').innerHTML=`<p>${good?'Correct!':'Correct answer: '+q[1]}</p>${q.why?`<p class="xs2">${q.why}</p>`:''}${good?'':'<button class="btn ghost" id="ask">Ask StockWiz why</button><button class="btn ghost" id="asks">Explain it in simple words</button>'}<button class="btn" id="${out?'pr':'nx'}">${out?'Out of hearts: start practice':'Continue'}</button>`;
 }
 function finish(){
  let nl=false;const wr=N-right,xp=KD=='p'?0:wr==0?80:wr>=5?50:60;
@@ -375,7 +375,7 @@ $('#x').onclick=quit;
 function tab(t){['learn','chat','news','picks','prac','hist'].forEach(v=>$('#'+v).classList.toggle('on',v==t));document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t==t))}
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>tab(b.dataset.t));
 /* chat */
-const SYS="You are stockgpt, a friendly tutor teaching beginners about stocks and investing. Answer in plain language in under 120 words, with one short real-world example. Use **bold** for key terms. This is education only: never tell the user to buy or sell a specific security and never predict prices; if asked, explain how to evaluate it instead.";
+const SYS="You are StockWiz, a friendly tutor teaching beginners about stocks and investing. Answer in plain language in under 120 words, with one short real-world example. Use **bold** for key terms. This is education only: never tell the user to buy or sell a specific security and never predict prices; if asked, explain how to evaluate it instead.";
 const KB=[[/etf|index fund/,"An **ETF** is a basket of many investments you buy as a single share on an exchange. An **index fund** tracks a list like the S&P 500, so one purchase spreads your money across hundreds of companies."],
 [/dividend/,"A **dividend** is a slice of a company's profit paid to shareholders, often every quarter. Not every company pays one; many reinvest profits to grow instead."],
 [/\bp\/e\b|price.to.earn/,"The **P/E ratio** is share price divided by earnings per share. It shows how much investors pay for each $1 of profit. A high P/E often signals expected growth, so compare it within the same industry."],
@@ -394,13 +394,13 @@ async function send(t,sm){const simp=sm||simple;
  t=(t||'').trim();if(!t||busy)return;busy=true;$('#in').value='';$('#chips').innerHTML='';
  add(t,'u');hist.push(['User',t]);const b=add('Thinking…','a');let out='';
  try{if(!sample)throw 0;
-  const r=await sample(SYS+(simp?SIMPLE:'')+'\n\nConversation so far:\n'+hist.slice(-8).map(m=>m[0]+': '+m[1]).join('\n')+'\nstockgpt:',{cache:false,onText:x=>{b.innerHTML=fmt(x.text);msgs.scrollTop=msgs.scrollHeight}});
+  const r=await sample(SYS+(simp?SIMPLE:'')+'\n\nConversation so far:\n'+hist.slice(-8).map(m=>m[0]+': '+m[1]).join('\n')+'\nStockWiz:',{cache:false,onText:x=>{b.innerHTML=fmt(x.text);msgs.scrollTop=msgs.scrollHeight}});
   out=r.text}catch(e){}
  if(!out)out=local(t);
- b.innerHTML=fmt(out);hist.push(['stockgpt',out]);busy=false;
+ b.innerHTML=fmt(out);hist.push(['StockWiz',out]);busy=false;
  if(sample){const s=document.createElement('button');s.className='chip';s.textContent='Explain simpler';s.onclick=()=>{s.remove();send('Explain your last answer again in much simpler words.',1)};b.append(document.createElement('br'),s)}msgs.scrollTop=msgs.scrollHeight;
 }
-add("Hi, I'm **stockgpt**. Ask me anything about stocks, from what a share is to how ETFs work. I explain concepts; I don't give buy or sell tips.",'a');
+add("Hi, I'm **StockWiz**. Ask me anything about stocks, from what a share is to how ETFs work. I explain concepts; I don't give buy or sell tips.",'a');
 $('#chips').innerHTML=["What is a stock?","Explain the P/E ratio","ETF vs index fund?","How do dividends work?"].map(s=>`<button class="chip">${s}</button>`).join('');
 $('#chips').onclick=e=>{if(e.target.classList.contains('chip'))send(e.target.textContent)};
 $('#go').onclick=()=>send($('#in').value);
@@ -470,7 +470,7 @@ const RISK={S:"Risk: big year-to-date gains can reverse fast, and many of these 
 let pf='A',op=-1;
 function renderPicks(){
  const l=PK.filter(p=>pf=='A'||p[0]==pf);
- $('#picks').innerHTML=`<div class="card"><h3>Top 50 performers</h3><p>Ranked by past results: stocks by 2026 gain to Oct 2, funds by 1-year return to Sept 30, bond funds as labeled. Past performance does not predict future returns. Educational only, not financial advice.</p></div><div id="pf">`+[['A','All 50'],['S','Stocks'],['F','Funds'],['B','Bonds']].map(c=>`<button class="chip" data-f="${c[0]}" aria-pressed="${pf==c[0]}">${c[1]}</button>`).join('')+'</div>'+l.map(p=>{const i=PK.indexOf(p);return `<div class="pk"><button class="row" data-i="${i}" aria-expanded="${op==i}"><b>${p[1]}</b><span>${p[2]}</span><em>${p[3]}</em></button>${op==i?`<div class="why"><p><b>Why it is on the list:</b> ${p[4]}</p><p class="rk">${RISK[p[0]]}</p><button class="btn" data-a="${i}">Ask stockgpt about ${p[1]}</button></div>`:''}</div>`}).join('');
+ $('#picks').innerHTML=`<div class="card"><h3>Top 50 performers</h3><p>Ranked by past results: stocks by 2026 gain to Oct 2, funds by 1-year return to Sept 30, bond funds as labeled. Past performance does not predict future returns. Educational only, not financial advice.</p></div><div id="pf">`+[['A','All 50'],['S','Stocks'],['F','Funds'],['B','Bonds']].map(c=>`<button class="chip" data-f="${c[0]}" aria-pressed="${pf==c[0]}">${c[1]}</button>`).join('')+'</div>'+l.map(p=>{const i=PK.indexOf(p);return `<div class="pk"><button class="row" data-i="${i}" aria-expanded="${op==i}"><b>${p[1]}</b><span>${p[2]}</span><em>${p[3]}</em></button>${op==i?`<div class="why"><p><b>Why it is on the list:</b> ${p[4]}</p><p class="rk">${RISK[p[0]]}</p><button class="btn" data-a="${i}">Ask StockWiz about ${p[1]}</button></div>`:''}</div>`}).join('');
 }
 $('#picks').onclick=e=>{const f=e.target.closest('[data-f]'),r=e.target.closest('.row'),a=e.target.closest('[data-a]');
  if(f){pf=f.dataset.f;op=-1;renderPicks()}else if(r){const i=+r.dataset.i;op=op==i?-1:i;renderPicks()}else if(a){const p=PK[+a.dataset.a];tab('chat');send(`Tell me about ${p[2]} (${p[1]}): what it is, why it has performed well in 2026, and the main risks.`)}};
@@ -486,8 +486,8 @@ const rn=()=>{let u=0;while(!u)u=Math.random();return Math.sqrt(-2*Math.log(u))*
 const $m=(x,d=2)=>(x<0?'-':'')+'$'+Math.abs(x).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
 const pc=x=>(x>=0?'+':'')+(x*100).toFixed(2)+'%',sg=x=>(x>=0?'+':'')+$m(x);
 let X={cash:1e5,pos:{}},si=0,hov=-1,rq=0,mkt='US',ct='l';
-try{const z=JSON.parse(localStorage.getItem('stockgpt:px'));if(z&&z.pos)X=z}catch(e){}
-const saveX=()=>{if(ACC)return queueSync();try{localStorage.setItem('stockgpt:px',JSON.stringify(X))}catch(e){}};
+try{const z=JSON.parse(localStorage.getItem('StockWiz:px'));if(z&&z.pos)X=z}catch(e){}
+const saveX=()=>{if(ACC)return queueSync();try{localStorage.setItem('StockWiz:px',JSON.stringify(X))}catch(e){}};
 const IX={};MK.forEach((m,i)=>IX[m[0]]=i);
 const pr=MK.map(m=>m[3]),lt=MK.map(()=>0),hs=MK.map(m=>{const v=VOL[m[2]],a=[m[3]];let p=m[3];for(let k=0;k<89;k++){p*=1-v*rn();a.push(p)}return a.reverse()});
 const PV=()=>Object.keys(X.pos).reduce((a,t)=>a+X.pos[t].sh*pr[IX[t]],0);
@@ -588,8 +588,8 @@ $('#acb').onclick=async e=>{const t=e.target.closest('button');if(!t)return;
  else if(t.id=='lo')logout();
  else if(t.id=='li'){$('#ac').style.display='none';showGate('in')}
  else if(t.dataset.pw){const o=$('#op').value,nw=$('#np').value,am=$('#am');if(nw.length<6){am.textContent='New password must be at least 6 characters.';return}
-  try{await unseal(await mkKey(o,ACC.name),LS('stockgpt:acct:'+ACC.uid))}catch(e){am.textContent='Current password is wrong.';return}
-  ACC.key=await mkKey(nw,ACC.name);if(LS('stockgpt:sess')){try{localStorage.setItem('stockgpt:sess',JSON.stringify({name:ACC.name,uid:ACC.uid,jwk:await crypto.subtle.exportKey('jwk',ACC.key)}))}catch(e){}}
+  try{await unseal(await mkKey(o,ACC.name),LS('StockWiz:acct:'+ACC.uid))}catch(e){am.textContent='Current password is wrong.';return}
+  ACC.key=await mkKey(nw,ACC.name);if(LS('StockWiz:sess')){try{localStorage.setItem('StockWiz:sess',JSON.stringify({name:ACC.name,uid:ACC.uid,jwk:await crypto.subtle.exportKey('jwk',ACC.key)}))}catch(e){}}
   await pushAcc();am.textContent='Password changed. Use the new one on your other devices.'}
  else if(t.dataset.th){S.th=t.dataset.th;save();applyTh();renderAc()}
  else if(t.dataset.rs){const k=t.dataset.rs;if(rsq!=k){rsq=k;t.textContent='Tap again to confirm';return}rsq='';
@@ -604,8 +604,8 @@ renderHist();
 /* ---------- accounts ---------- */
 const te=new TextEncoder(),td=new TextDecoder(),defS=()=>({xp:0,done:[],streak:0,last:"",days:[],name:"Trader",hd:[],th:"auto",hr:5,hday:""});
 const hx=b=>[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join(''),b64=u=>{let t='';u.forEach(c=>t+=String.fromCharCode(c));return btoa(t)},ub=t=>Uint8Array.from(atob(t),c=>c.charCodeAt(0));
-const uidOf=async n=>hx(await crypto.subtle.digest('SHA-256',te.encode('stockgpt:'+n.toLowerCase()))).slice(0,32);
-async function mkKey(pw,n){const m=await crypto.subtle.importKey('raw',te.encode(pw),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',salt:te.encode('stockgpt-salt:'+n.toLowerCase()),iterations:150000,hash:'SHA-256'},m,{name:'AES-GCM',length:256},true,['encrypt','decrypt'])}
+const uidOf=async n=>hx(await crypto.subtle.digest('SHA-256',te.encode('StockWiz:'+n.toLowerCase()))).slice(0,32);
+async function mkKey(pw,n){const m=await crypto.subtle.importKey('raw',te.encode(pw),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',salt:te.encode('StockWiz-salt:'+n.toLowerCase()),iterations:150000,hash:'SHA-256'},m,{name:'AES-GCM',length:256},true,['encrypt','decrypt'])}
 async function seal(k,o){const iv=crypto.getRandomValues(new Uint8Array(12));return{iv:b64(iv),d:b64(new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv},k,te.encode(JSON.stringify(o)))))}}
 async function unseal(k,b){return JSON.parse(td.decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:ub(b.iv)},k,ub(b.d))))}
 const LS=k=>{try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}};
@@ -613,13 +613,13 @@ const cloudP=new Promise(r=>{try{window.claude.use('db').then(d=>{cloud=d;r()},(
 cloudP.then(()=>{if($('#gst'))gateStatus();if(ACC)syncFromCloud()});
 function syncTxt(){return !ACC?'':cloud?(ACC.cloud===false||ACC.cloudOff?'⚠️ Cloud save is off for this account, so progress is saved on this device only.':'☁️ Synced to the cloud. Log in from any device.'):'📱 Saved on this device only. Cloud sync is not available on this link.'}
 function queueSync(){clearTimeout(syncT);syncT=setTimeout(pushAcc,1200)}
-async function pushAcc(){if(!ACC)return;const b={...await seal(ACC.key,{S,X}),t:Date.now()};try{localStorage.setItem('stockgpt:acct:'+ACC.uid,JSON.stringify(b))}catch(e){}
+async function pushAcc(){if(!ACC)return;const b={...await seal(ACC.key,{S,X}),t:Date.now()};try{localStorage.setItem('StockWiz:acct:'+ACC.uid,JSON.stringify(b))}catch(e){}
  if(cloud&&!ACC.cloudOff){try{await cloud.doc('acct/'+ACC.uid).set(b);ACC.cloud=true}catch(e){ACC.cloud=false}}}
-async function syncFromCloud(){if(!ACC||!cloud||ACC.cloudOff)return;try{const sn=await cloud.doc('acct/'+ACC.uid).get(),l=LS('stockgpt:acct:'+ACC.uid);
+async function syncFromCloud(){if(!ACC||!cloud||ACC.cloudOff)return;try{const sn=await cloud.doc('acct/'+ACC.uid).get(),l=LS('StockWiz:acct:'+ACC.uid);
  if(!sn.exists){await pushAcc();return}const c=sn.data();let d;try{d=await unseal(ACC.key,c)}catch(e){ACC.cloudOff=1;return}
- if(!l||c.t>l.t){S=Object.assign(defS(),d.S);X=d.X||X;try{localStorage.setItem('stockgpt:acct:'+ACC.uid,JSON.stringify(c))}catch(e){}refreshAll()}else if(c.t<l.t)await pushAcc();else ACC.cloud=true}catch(e){}}
+ if(!l||c.t>l.t){S=Object.assign(defS(),d.S);X=d.X||X;try{localStorage.setItem('StockWiz:acct:'+ACC.uid,JSON.stringify(c))}catch(e){}refreshAll()}else if(c.t<l.t)await pushAcc();else ACC.cloud=true}catch(e){}}
 function refreshAll(){applyTh();renderLearn();renderHist();head();paint()}
-let gmode='in',LN=localStorage.getItem('stockgpt:last')||'';
+let gmode='in',LN=localStorage.getItem('StockWiz:last')||'';
 function gateStatus(){const e=$('#gst');if(e)e.textContent=cloud?'☁️ Cloud sync is on: log in from any device with your username and password.':'📱 On this link, accounts are saved on this device only. Open the accounts link to sync across devices.'}
 function renderGate(err){$('#gate').innerHTML=`<div class="gw"><div class="hero"><img class="mas" src="${BULL}" alt="Bruno the bull"><img class="mas big" src="${WOLF}" alt="Wally the wolf"><img class="mas" src="${BEAR}" alt="Bella the bear"></div><h1 class="gh">stock<span>gpt</span></h1><p class="gsub">Learn stocks. Trade on paper. Become a wizard.</p>
 <div class="gt"><button data-gm="in" class="${gmode=='in'?'on':''}">Log in</button><button data-gm="up" class="${gmode=='up'?'on':''}">Sign up</button></div>
@@ -627,14 +627,14 @@ function renderGate(err){$('#gate').innerHTML=`<div class="gw"><div class="hero"
 <div class="gerr" id="ge">${err||''}</div><button class="btn" id="gok" style="width:100%">${gmode=='in'?'Log in':'Create account'}</button><button class="btn ghost" id="ggu" style="width:100%;margin-top:12px">Play as guest</button><p class="gs" id="gst"></p></div>`;gateStatus()}
 function showGate(m){gmode=m||'in';$('#gate').style.display='block';renderGate()}
 async function signup(n,pw){const uid=await uidOf(n);let c=null;if(cloud){try{const sn=await cloud.doc('acct/'+uid).get();if(sn.exists)c=1}catch(e){}}
- if(c||LS('stockgpt:acct:'+uid))return 'That username is already taken.';
+ if(c||LS('StockWiz:acct:'+uid))return 'That username is already taken.';
  if(S.name=='Trader')S.name=n;ACC={name:n,uid,key:await mkKey(pw,n)};await pushAcc();return ''}
 async function login(n,pw){const uid=await uidOf(n);let c=null;if(cloud){try{const sn=await cloud.doc('acct/'+uid).get();if(sn.exists)c=sn.data()}catch(e){}}
- const l=LS('stockgpt:acct:'+uid),b=c&&l?(c.t>=l.t?c:l):(c||l);if(!b)return 'No account found with that username.'+(cloud?'':' Accounts on this link are saved on this device only.');
+ const l=LS('StockWiz:acct:'+uid),b=c&&l?(c.t>=l.t?c:l):(c||l);if(!b)return 'No account found with that username.'+(cloud?'':' Accounts on this link are saved on this device only.');
  let key,d;try{key=await mkKey(pw,n);d=await unseal(key,b)}catch(e){return 'Wrong username or password.'}
  S=Object.assign(defS(),d.S);X=d.X||{cash:1e5,pos:{}};ACC={name:n,uid,key};await pushAcc();return ''}
-async function enter(keep){$('#gate').style.display='none';try{localStorage.setItem('stockgpt:last',ACC.name);if(keep)localStorage.setItem('stockgpt:sess',JSON.stringify({name:ACC.name,uid:ACC.uid,jwk:await crypto.subtle.exportKey('jwk',ACC.key)}));else localStorage.removeItem('stockgpt:sess')}catch(e){}refreshAll();syncFromCloud()}
-function logout(){try{localStorage.removeItem('stockgpt:sess')}catch(e){}clearTimeout(syncT);ACC=null;S=defS();X={cash:1e5,pos:{}};$('#ac').style.display='none';refreshAll();showGate('in')}
+async function enter(keep){$('#gate').style.display='none';try{localStorage.setItem('StockWiz:last',ACC.name);if(keep)localStorage.setItem('StockWiz:sess',JSON.stringify({name:ACC.name,uid:ACC.uid,jwk:await crypto.subtle.exportKey('jwk',ACC.key)}));else localStorage.removeItem('StockWiz:sess')}catch(e){}refreshAll();syncFromCloud()}
+function logout(){try{localStorage.removeItem('StockWiz:sess')}catch(e){}clearTimeout(syncT);ACC=null;S=defS();X={cash:1e5,pos:{}};$('#ac').style.display='none';refreshAll();showGate('in')}
 $('#gate').onclick=async e=>{const b=e.target.closest('button');if(!b)return;
  if(b.dataset.gm){LN=$('#gu').value.trim();gmode=b.dataset.gm;renderGate()}
  else if(b.id=='ggu')$('#gate').style.display='none';
@@ -646,7 +646,7 @@ $('#gate').onclick=async e=>{const b=e.target.closest('button');if(!b)return;
   const err=await(gmode=='up'?signup(n,pw):login(n,pw));if(err)return renderGate(err);await enter(keep)}};
 addEventListener('pagehide',()=>{if(ACC)pushAcc()});
 $('#gate').style.display='block';$('#gate').innerHTML='<div class="gw"><p class="gs" style="margin-top:40vh">Loading…</p></div>';
-(async()=>{try{const ss=LS('stockgpt:sess');if(ss){const l=LS('stockgpt:acct:'+ss.uid),key=await crypto.subtle.importKey('jwk',ss.jwk,{name:'AES-GCM'},true,['encrypt','decrypt']),d=await unseal(key,l);
+(async()=>{try{const ss=LS('StockWiz:sess');if(ss){const l=LS('StockWiz:acct:'+ss.uid),key=await crypto.subtle.importKey('jwk',ss.jwk,{name:'AES-GCM'},true,['encrypt','decrypt']),d=await unseal(key,l);
  S=Object.assign(defS(),d.S);X=d.X||{cash:1e5,pos:{}};ACC={name:ss.name,uid:ss.uid,key};$('#gate').style.display='none';refreshAll();await ready();syncFromCloud();return}}catch(e){}
  showGate('in')})();
 document.addEventListener('keydown',e=>{if($('#ls').style.display!='flex'||e.target.tagName=='INPUT')return;
